@@ -831,6 +831,28 @@
       transform: translateY(-3px);
     }
 
+    /* Screenshots do tutorial */
+    .shot {
+      margin: 1.5rem 0;
+      border: 1px solid var(--border-code);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--code-bg);
+    }
+
+    .shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .shot figcaption {
+      padding: 0.9rem 1.15rem;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-code);
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .nav-links { display: none; }
@@ -855,6 +877,7 @@
       </a>
 
       <ul class="nav-links">
+        <li><a href="#tutorial">Tutorial</a></li>
         <li><a href="#pre-requisitos">Pré-requisitos</a></li>
         <li><a href="#instalacao">Instalação</a></li>
         <li><a href="#provedores">Provedores</a></li>
@@ -912,6 +935,7 @@
     <!-- Floating Navigation Bar -->
     <div class="quick-nav" id="quick-nav">
       <a href="#sobre">O que é?</a>
+      <a href="#tutorial">Tutorial com Prints</a>
       <a href="#pre-requisitos">Pré-requisitos</a>
       <a href="#instalacao">Instalação</a>
       <a href="#provedores">Provedores (Tabs)</a>
@@ -944,6 +968,200 @@
             <div class="mini-card-title">🔌 Protocolo MCP</div>
             <p>Integração nativa com <strong>Model Context Protocol</strong>, permitindo que a IA consulte bancos de dados, APIs do GitHub, documentações externas e ferramentas personalizadas.</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção: Tutorial passo a passo com prints -->
+    <section id="tutorial">
+      <div class="section-title-wrap">
+        <div class="section-tag">Tutorial com prints</div>
+        <h2 class="section-title">Do zero ao primeiro prompt, tela por tela</h2>
+        <p class="section-desc">Roteiro real de uma instalação no Windows: reinstalar o OpenClaude, conferir o ambiente e passar pelo assistente de configuração usando o OpenRouter com modelos gratuitos.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">T1</div>
+          <h3 class="card-title">Remover uma instalação antiga (opcional)</h3>
+        </div>
+        <p>Se o OpenClaude já estava instalado e você quer começar limpo, remova <strong>só</strong> o pacote dele. A configuração antiga fica na pasta <code>.openclaude</code> e no arquivo <code>.openclaude.json</code> do seu usuário.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre>npm uninstall -g @gitlawb/openclaude
+
+<span class="comment"># Opcional: apaga a configuração antiga (inclusive chaves salvas)</span>
+Remove-Item -Recurse -Force "$env:USERPROFILE\.openclaude", "$env:USERPROFILE\.openclaude.json"</pre>
+        </div>
+        <div class="note-box warning">
+          <strong>Não confunda com o Claude Code.</strong> O OpenClaude e o Claude Code oficial são programas diferentes. O Claude Code vem do pacote <code>@anthropic-ai/claude-code</code> (ou do instalador nativo em <code>%USERPROFILE%\.local\bin\claude.exe</code>) e guarda a configuração em <code>.claude\</code>. Nada disso precisa ser removido para reinstalar o OpenClaude.
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">T2</div>
+          <h3 class="card-title">Conferir Node.js, npm e Git</h3>
+        </div>
+        <p>Rode cada comando. Se aparecer um número de versão, está instalado; se aparecer <em>"não é reconhecido como comando"</em>, não está. O npm vem junto com o Node.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell ou CMD</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre>node -v
+npm -v
+git --version</pre>
+        </div>
+        <p>Não tem o Node? Escolha <strong>um</strong> dos caminhos:</p>
+        <ul>
+          <li><strong>winget</strong> (mais simples, já vem no Windows 10/11): <code>winget install OpenJS.NodeJS.LTS</code></li>
+          <li><strong>Site oficial:</strong> baixe a versão LTS em <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a> e mantenha marcada a opção "Add to PATH".</li>
+          <li><strong>Chocolatey</strong> (o caminho do vídeo de referência): exige o terminal <em>como administrador</em>.</li>
+        </ul>
+        <div class="note-box info">
+          <strong>Erro "requires Administrative permissions" no Chocolatey?</strong> O terminal não estava aberto como administrador. Menu Iniciar → digite <code>cmd</code> → botão direito em <strong>Prompt de Comando</strong> → <strong>Executar como administrador</strong>. Se o Node já estiver instalado, pule o Chocolatey: ele só serve para instalar o Node.
+        </div>
+        <div class="note-box warning">
+          <strong>PowerShell não é CMD.</strong> Comandos como <code>[Environment]::SetEnvironmentVariable(...)</code> só funcionam no PowerShell. No CMD eles dão <em>"A sintaxe do nome do arquivo... está incorreta"</em>.
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">T3</div>
+          <h3 class="card-title">Instalar o OpenClaude</h3>
+        </div>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell ou CMD</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre>npm install -g @gitlawb/openclaude@latest
+openclaude --version</pre>
+        </div>
+        <div class="note-box success">
+          Deu certo quando aparecer <code>added 8 packages</code> na instalação e algo como <code>0.31.0 (OpenClaude)</code> na versão.
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">T4</div>
+          <h3 class="card-title">Abrir dentro da pasta do projeto</h3>
+        </div>
+        <p>O OpenClaude trabalha na pasta em que foi aberto: ele pode ler, editar e executar arquivos ali. Por isso, <strong>entre na pasta do projeto antes</strong> de abri-lo.</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre><span class="comment"># Crie uma pasta de testes (ou use a do seu projeto)</span>
+mkdir $env:USERPROFILE\Projetos\teste-openclaude
+cd $env:USERPROFILE\Projetos\teste-openclaude
+openclaude</pre>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">T5</div>
+          <h3 class="card-title">Assistente de configuração, tela por tela</h3>
+        </div>
+        <p>Na primeira execução, o OpenClaude abre um assistente. São sete telas:</p>
+
+        <figure class="shot">
+          <img src="img/tutorial/01-tema.png" alt="Tela de escolha do tema do terminal, com Dark mode selecionado e prévia de código" loading="lazy" />
+          <figcaption><strong>1. Tema.</strong> Só muda as cores. <em>Dark mode</em> já vem selecionado: aperte <strong>Enter</strong>. Dá para trocar depois com <code>/theme</code>.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <img src="img/tutorial/02-login.png" alt="Tela Select login method com três opções; a opção 3, 3rd-party platform, está selecionada" loading="lazy" />
+          <figcaption><strong>2. Método de login.</strong> Escolha <strong>3. 3rd-party platform</strong>. As opções 1 e 2 são para quem paga a Anthropic (assinatura ou API).</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <img src="img/tutorial/03-provedor.png" alt="Lista Set up provider com vários provedores; a opção 35, OpenRouter, está selecionada" loading="lazy" />
+          <figcaption><strong>3. Provedor.</strong> Use as setas até <strong>35. OpenRouter</strong> e aperte <strong>Enter</strong>. O preset já preenche o endereço da API.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <img src="img/tutorial/04-modelo.png" alt="Tela Create provider profile, passo 1 de 2, com o modelo openai/gpt-5-mini preenchido" loading="lazy" />
+          <figcaption><strong>4. Modelo padrão (passo 1 de 2).</strong> O campo vem com <code>openai/gpt-5-mini</code>, que é <strong>pago</strong>. Apague com Backspace (se for só texto cinza de exemplo, basta começar a digitar), escreva <code>openrouter/free</code> e aperte <strong>Enter</strong>. No passo 2, cole a sua API key do OpenRouter.</figcaption>
+        </figure>
+
+        <div class="note-box warning">
+          <strong>API key:</strong> crie a sua em <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai/keys</a> (começa com <code>sk-or-v1-</code>). Cole só no terminal do OpenClaude: nunca em chats, prints, repositórios ou arquivos que vão para o GitHub.
+        </div>
+
+        <figure class="shot">
+          <img src="img/tutorial/05-configurado.png" alt="Mensagem verde Provider configured: OpenRouter" loading="lazy" />
+          <figcaption><strong>5. Provedor configurado.</strong> Apareceu <em>Provider configured: OpenRouter</em>. Aperte <strong>Enter</strong>.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <img src="img/tutorial/06-seguranca.png" alt="Tela Security notes com dois avisos: o OpenClaude pode errar e riscos de prompt injection" loading="lazy" />
+          <figcaption><strong>6. Avisos de segurança.</strong> Só leitura: a IA pode errar (revise antes de deixá-la rodar comandos) e arquivos de projetos desconhecidos podem trazer instruções escondidas (<em>prompt injection</em>). Aperte <strong>Enter</strong>.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <img src="img/tutorial/07-confiar-pasta.png" alt="Tela Accessing workspace mostrando a pasta C:\Users\rcmin, com as opções Yes, I trust this folder e No, exit" loading="lazy" />
+          <figcaption><strong>7. Confiar na pasta.</strong> Confira o caminho mostrado. Neste print o OpenClaude foi aberto na pasta do usuário inteira (<code>C:\Users\rcmin</code>): aqui o certo é <strong>2. No, exit</strong>, entrar na pasta do projeto com <code>cd</code> e abrir de novo. Só escolha <strong>1. Yes</strong> quando o caminho for a pasta do projeto.</figcaption>
+        </figure>
+
+        <div class="note-box success">
+          Sair nessa tela não perde nada: a configuração do OpenRouter já ficou salva. Ao abrir de novo, o assistente vai direto para a confirmação da pasta.
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">T6</div>
+          <h3 class="card-title">Primeiro teste e erros comuns</h3>
+        </div>
+        <p>Quando aparecer o campo de digitação (<code>&gt;</code>), pergunte algo simples, como <em>"olá, qual modelo você é?"</em>. Se ele responder, está tudo funcionando.</p>
+        <div class="cmd-table-wrap">
+          <table class="cmd-table">
+            <thead><tr><th>Erro</th><th>Causa</th><th>O que fazer</th></tr></thead>
+            <tbody>
+              <tr><td><code>401</code></td><td>API key errada ou revogada</td><td>Gere outra em openrouter.ai/keys e configure de novo</td></tr>
+              <tr><td><code>404</code> / <em>model not found</em></td><td>Nome do modelo errado ou modelo retirado do ar</td><td>Rode <code>/model</code> e escolha outro da tabela abaixo</td></tr>
+              <tr><td><code>429</code></td><td>Limite diário dos modelos gratuitos</td><td>Espere renovar ou volte para <code>openrouter/free</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Modelos gratuitos do OpenRouter usados na Aula 03 (consulta de 19/09/2026; a lista muda com frequência):</p>
+        <div class="cmd-table-wrap">
+          <table class="cmd-table">
+            <thead><tr><th>Nome para digitar</th><th>Contexto</th></tr></thead>
+            <tbody>
+              <tr><td><code>openrouter/free</code></td><td>Automático: o OpenRouter escolhe um gratuito no ar (recomendado)</td></tr>
+              <tr><td><code>qwen/qwen3.8-27b:free</code></td><td>262 mil tokens</td></tr>
+              <tr><td><code>nex-agi/nex-n2.5-pro:free</code></td><td>262 mil tokens</td></tr>
+              <tr><td><code>nex-agi/nex-n2.5-mini:free</code></td><td>262 mil tokens</td></tr>
+              <tr><td><code>inclusionai/ling-3.0-flash-vl:free</code></td><td>262 mil tokens</td></tr>
+              <tr><td><code>dots-studio/dots-3-note-preview:free</code></td><td>512 mil tokens</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Lista atualizada, direto do terminal:</p>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre>(Invoke-RestMethod https://openrouter.ai/api/v1/models).data |
+  Where-Object { $_.id -like '*:free' } |
+  Select-Object id, @{n='contexto';e={$_.context_length}} |
+  Format-Table -AutoSize</pre>
         </div>
       </div>
     </section>
@@ -1531,6 +1749,7 @@ openclaude</pre>
     <!-- Footer -->
     <footer>
       <div class="footer-links">
+        <a href="#tutorial">Tutorial</a>
         <a href="#pre-requisitos">Pré-requisitos</a>
         <a href="#instalacao">Instalação</a>
         <a href="#provedores">Provedores</a>
