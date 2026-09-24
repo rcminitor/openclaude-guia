@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cabeamento de Rede</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="capa">
+  <div class="wrap">
+    <p class="tag">Assistente de Tecnologias da Informação · Senac / Cuca Barra do Ceará</p>
+    <h1>Cabeamento de Rede</h1>
+    <p class="sub">Do cabo par trançado ao cabo crimpado e testado</p>
+    <p class="prof">Professor: Olavo</p>
+    <nav class="sumario">
+      <a href="#par">1. Par trançado</a>
+      <a href="#categorias">2. Categorias</a>
+      <a href="#padrao">3. Sequência de cores</a>
+      <a href="#rj45">4. Conector RJ45</a>
+      <a href="#alicate">5. Alicate</a>
+      <a href="#etapas">6. Crimpagem passo a passo</a>
+      <a href="#quiz">7. Teste seus conhecimentos</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="par">
+    <h2><span>1</span> Par trançado</h2>
+    <div class="duas">
+      <div>
+        <p class="destaque">É um tipo de cabo de rede formado por <strong>pares de fios de cobre entrelaçados</strong> para cancelar interferências eletromagnéticas e ruídos.</p>
+        <div class="card">
+          <h3>🌀 Trançado dos fios</h3>
+          <p>Os pares são torcidos juntos para anular ruídos externos e interferências entre os próprios cabos, o chamado <em>crosstalk</em> (diafonia).</p>
+        </div>
+        <div class="card">
+          <h3>⚖️ Sinal balanceado</h3>
+          <p>Um fio carrega o sinal positivo e o outro o negativo (ou a referência de terra). Isso neutraliza as perturbações elétricas captadas no caminho.</p>
+        </div>
+      </div>
+      <figure><img src="img/par-trancado.jpeg" alt="Cabo par trançado com os pares expostos"></figure>
+    </div>
+  </section>
+
+  <section id="categorias">
+    <h2><span>2</span> Categorias</h2>
+    <div class="tabela-wrap">
+      <table>
+        <thead><tr><th>Característica</th><th>Cat5e</th><th>Cat6</th></tr></thead>
+        <tbody>
+          <tr><td>Nome</td><td>Categoria 5 Aprimorada</td><td>Categoria 6</td></tr>
+          <tr><td>Pares</td><td>4 pares de cobre trançados</td><td>4 pares de cobre trançados</td></tr>
+          <tr><td>Frequência</td><td>até 100 MHz</td><td>até <strong>250 MHz</strong></td></tr>
+          <tr><td>Velocidade</td><td>1 Gbps a 100 m</td><td><strong>10 Gbps</strong> até 37–55 m · 1 Gbps a 100 m</td></tr>
+          <tr><td>Construção</td><td>Simples e econômica</td><td>Trançamento mais justo e separador interno (cruzeta) contra o crosstalk</td></tr>
+          <tr><td>Uso típico</td><td>Redes locais rápidas, estáveis e baratas</td><td>Redes que precisam de mais desempenho</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="galeria">
+      <figure><img src="img/cat-a.jpeg" alt="Cabo de rede de categoria"></figure>
+      <figure><img src="img/cat-b.png" alt="Comparação entre categorias de cabo"></figure>
+    </div>
+  </section>
+
+  <section id="padrao">
+    <h2><span>3</span> Sequência do cabo par trançado</h2>
+    <p>Com a trava do RJ45 virada para baixo e os contatos para você, os pinos são contados <strong>da esquerda para a direita (1 → 8)</strong>. Alterne entre os padrões:</p>
+    <div class="botoes" role="tablist">
+      <button class="ativo" data-padrao="B">T568B (mais usado)</button>
+      <button data-padrao="A">T568A</button>
+    </div>
+    <ol class="fios" id="fios"></ol>
+    <p class="dica">💡 Mesmo padrão nas duas pontas = <strong>cabo direto</strong>. Uma ponta A e outra B = <strong>cabo cruzado (crossover)</strong>.</p>
+    <figure class="centro"><img src="img/sequencia.jpeg" alt="Sequência de cores dos padrões T568A e T568B"></figure>
+  </section>
+
+  <section id="rj45">
+    <h2><span>4</span> Conector RJ45</h2>
+    <p class="destaque">Interface física padronizada, geralmente de <strong>plástico transparente</strong>, usada nas pontas dos cabos Ethernet para conectar computadores, roteadores, switches e modems.</p>
+    <div class="galeria tres">
+      <figure><img src="img/rj45-a.jpeg" alt="Conector RJ45"></figure>
+      <figure><img src="img/rj45-b.png" alt="Pinagem do conector RJ45"></figure>
+      <figure><img src="img/rj45-c.jpeg" alt="Conector RJ45 crimpado"></figure>
+    </div>
+  </section>
+
+  <section id="alicate">
+    <h2><span>5</span> Alicate de crimpagem</h2>
+    <div class="duas">
+      <div>
+        <p>Ferramenta manual indispensável para profissionais de telecomunicações, redes, elétrica e eletrônica.</p>
+        <div class="card">
+          <h3>📖 O que é “crimpar”?</h3>
+          <p>Do inglês <em>crimping</em>: prensar, deformar ou moldar uma peça plástica ou metálica para fixar firmemente um cabo a um conector, garantindo a transmissão de dados ou energia <strong>sem solda</strong>.</p>
+        </div>
+      </div>
+      <figure><img src="img/alicate.png" alt="Alicate de crimpagem"></figure>
+    </div>
+  </section>
+
+  <section id="etapas">
+    <h2><span>6</span> Etapas de crimpagem</h2>
+    <p>Clique em cada etapa para vê-la em detalhe. Marque ✔ quando concluir na prática.</p>
+    <div class="passos" id="passos"></div>
+    <article class="passo-detalhe" id="detalhe" aria-live="polite"></article>
+  </section>
+
+  <section id="quiz">
+    <h2><span>7</span> Teste seus conhecimentos</h2>
+    <div id="perguntas"></div>
+    <p class="resultado" id="resultado"></p>
+  </section>
+
+</main>
+
+<footer><p>Cabeamento de Rede · Prof. Olavo · Senac</p></footer>
+
+<script src="aula.js"></script>
+</body>
+</html>
