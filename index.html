@@ -1,105 +1,344 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OpenClaude — Guia de Configuração Windows</title>
+  <title>OpenClaude — Guia Completo de Instalação, Configuração & Provedores no Windows</title>
+  <meta name="description" content="Guia definitivo para configurar o OpenClaude no Windows: instalação do Node 22+, integração com OpenRouter gratuito, Ollama local, DeepSeek, comandos essenciais e repositórios GitHub." />
+  <meta name="keywords" content="OpenClaude, Claude Code, OpenRouter, Ollama, DeepSeek, AI Coding Agent, Windows, PowerShell, GitHub, Gitlawb" />
+  <meta name="author" content="rcminitor" />
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content="OpenClaude — Guia de Configuração Windows & GitHub" />
+  <meta property="og:description" content="Aprenda a instalar e utilizar o OpenClaude CLI no Windows com modelos gratuitos ou locais (OpenRouter, Ollama, DeepSeek). Guia prático com comandos e repositórios." />
+  <meta property="og:type" content="website" />
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
     :root {
       --bg: #07090e;
-      --card-bg: rgba(18, 24, 38, 0.65);
+      --bg-surface: #0c101a;
+      --card-bg: rgba(16, 22, 36, 0.72);
       --card-border: rgba(255, 255, 255, 0.08);
-      --card-border-hover: rgba(99, 102, 241, 0.4);
+      --card-border-hover: rgba(99, 102, 241, 0.45);
       --text: #f1f5f9;
       --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
       --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
-      --accent-glow: rgba(139, 92, 246, 0.25);
-      --code-bg: #0b0f19;
-      --border-code: rgba(255, 255, 255, 0.06);
+      --accent-glow: rgba(139, 92, 246, 0.28);
+      --code-bg: #070b13;
+      --border-code: rgba(255, 255, 255, 0.08);
       --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.2);
       --amber: #f59e0b;
+      --amber-glow: rgba(245, 158, 11, 0.2);
+      --cyan: #06b6d4;
+      --purple: #a855f7;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-full: 9999px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.65;
-      padding: 4rem 1.5rem;
       min-height: 100vh;
       background-image: 
-        radial-gradient(circle at 15% 10%, rgba(99, 102, 241, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 85% 80%, rgba(217, 70, 239, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.04) 0%, transparent 60%);
+        radial-gradient(circle at 20% 0%, rgba(99, 102, 241, 0.16) 0%, transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(217, 70, 239, 0.10) 0%, transparent 45%),
+        radial-gradient(circle at 50% 75%, rgba(6, 182, 212, 0.08) 0%, transparent 55%),
+        radial-gradient(circle at 10% 90%, rgba(139, 92, 246, 0.12) 0%, transparent 45%);
       background-attachment: fixed;
+      overflow-x: hidden;
     }
 
-    .wrapper { max-width: 860px; margin: 0 auto; }
+    /* Header & Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(7, 9, 14, 0.78);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      padding: 0.85rem 1.5rem;
+      transition: all 0.3s ease;
+    }
 
-    header { text-align: center; margin-bottom: 3.5rem; }
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .brand-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .btn-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      padding: 0.45rem 0.9rem;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-github:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-github svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* Main Container */
+    .wrapper {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem 1.5rem;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+      padding-top: 1rem;
+    }
 
     .badge-pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.35rem 1rem;
-      border-radius: 9999px;
-      background: rgba(99, 102, 241, 0.1);
-      border: 1px solid rgba(99, 102, 241, 0.25);
-      font-size: 0.8rem;
-      font-weight: 600;
+      gap: 0.55rem;
+      padding: 0.4rem 1.15rem;
+      border-radius: var(--radius-full);
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      font-size: 0.82rem;
+      font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: #a5b4fc;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
       backdrop-filter: blur(8px);
     }
 
     .badge-dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       background: #818cf8;
       border-radius: 50%;
       box-shadow: 0 0 10px #818cf8;
+      animation: pulse-dot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
     }
 
     h1 {
-      font-size: clamp(2.2rem, 4vw, 3rem);
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
       font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
-      margin-bottom: 1rem;
-      background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+      letter-spacing: -0.035em;
+      line-height: 1.12;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(180deg, #ffffff 15%, #cbd5e1 65%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-gradient-text {
+      background: var(--accent-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .subtitle {
       color: var(--text-muted);
-      font-size: 1.05rem;
-      max-width: 580px;
-      margin: 0 auto;
+      font-size: 1.15rem;
+      max-width: 680px;
+      margin: 0 auto 2rem auto;
       font-weight: 400;
     }
 
+    .hero-features-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+
+    .feat-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      padding: 0.35rem 0.85rem;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    .feat-tag svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--accent);
+    }
+
+    /* Quick Links Bar (Sticky anchors) */
+    .quick-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 3.5rem;
+      padding: 0.6rem 0.8rem;
+      background: rgba(18, 24, 38, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-full);
+      backdrop-filter: blur(12px);
+    }
+
+    .quick-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-full);
+      transition: all 0.2s ease;
+    }
+
+    .quick-nav a:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Section Headers */
+    .section-title-wrap {
+      margin-bottom: 1.75rem;
+      margin-top: 3.5rem;
+    }
+
+    .section-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #818cf8;
+      margin-bottom: 0.35rem;
+    }
+
+    .section-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      margin-top: 0.35rem;
+    }
+
+    /* Cards */
     .step-card {
       background: var(--card-bg);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
+      border-radius: var(--radius-lg);
       padding: 2.2rem;
-      margin-bottom: 1.75rem;
+      margin-bottom: 2rem;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
     }
 
     .step-card:hover {
       border-color: var(--card-border-hover);
-      box-shadow: 0 20px 40px -15px var(--accent-glow);
+      box-shadow: 0 20px 45px -15px var(--accent-glow);
       transform: translateY(-2px);
     }
 
@@ -111,216 +350,1209 @@
     }
 
     .step-icon {
-      width: 38px;
-      height: 38px;
+      width: 42px;
+      height: 42px;
       border-radius: 12px;
       background: var(--accent-gradient);
       color: white;
-      font-weight: 700;
-      font-size: 0.95rem;
+      font-weight: 800;
+      font-size: 1rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
       flex-shrink: 0;
     }
 
     .card-title {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       font-weight: 700;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.015em;
       color: #ffffff;
     }
 
     p {
       color: #94a3b8;
-      font-size: 0.95rem;
-      margin-bottom: 0.85rem;
+      font-size: 0.96rem;
+      margin-bottom: 0.95rem;
       font-weight: 400;
     }
 
     strong { color: #f1f5f9; font-weight: 600; }
 
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88em;
+      background: rgba(255, 255, 255, 0.07);
+      padding: 0.15rem 0.4rem;
+      border-radius: 5px;
+      color: #38bdf8;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Code Blocks */
     .code-container {
       position: relative;
       background: var(--code-bg);
       border: 1px solid var(--border-code);
-      border-radius: 12px;
-      margin: 1.1rem 0;
+      border-radius: var(--radius-md);
+      margin: 1.15rem 0;
       overflow: hidden;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
     }
 
     .code-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.5rem 1rem;
-      background: rgba(255, 255, 255, 0.02);
+      padding: 0.55rem 1rem;
+      background: rgba(255, 255, 255, 0.025);
       border-bottom: 1px solid var(--border-code);
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       color: #64748b;
       font-family: 'JetBrains Mono', monospace;
     }
 
+    .code-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .dot.red { background: #ef4444; opacity: 0.8; }
+    .dot.yellow { background: #f59e0b; opacity: 0.8; }
+    .dot.green { background: #10b981; opacity: 0.8; }
+
     pre {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-      padding: 1.1rem 1.2rem;
+      font-size: 0.89rem;
+      padding: 1.15rem 1.25rem;
       color: #38bdf8;
       overflow-x: auto;
-      line-height: 1.6;
+      line-height: 1.62;
     }
+
+    .comment { color: #64748b; font-style: italic; }
+    .keyword { color: #f472b6; }
+    .string { color: #34d399; }
+    .variable { color: #fbbf24; }
 
     .copy-button {
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.38rem;
       background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: #cbd5e1;
-      padding: 0.3rem 0.65rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 500;
+      padding: 0.32rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.76rem;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
-    .copy-button:hover { background: rgba(255, 255, 255, 0.12); color: white; }
-    .copy-button.copied { background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: var(--emerald); }
+    .copy-button:hover { 
+      background: rgba(255, 255, 255, 0.14); 
+      color: #ffffff; 
+      border-color: rgba(255, 255, 255, 0.25);
+    }
 
+    .copy-button.copied { 
+      background: rgba(16, 185, 129, 0.25); 
+      border-color: rgba(16, 185, 129, 0.5); 
+      color: var(--emerald); 
+    }
+
+    /* Note & Alert Boxes */
     .note-box {
       border-left: 3px solid #818cf8;
-      background: rgba(99, 102, 241, 0.06);
-      padding: 0.9rem 1.2rem;
-      border-radius: 0 10px 10px 0;
-      margin: 1.2rem 0;
-      font-size: 0.9rem;
+      background: rgba(99, 102, 241, 0.08);
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 1.25rem 0;
+      font-size: 0.92rem;
       color: #cbd5e1;
     }
 
-    .note-box.warning { border-left-color: var(--amber); background: rgba(245, 158, 11, 0.06); }
+    .note-box.warning { 
+      border-left-color: var(--amber); 
+      background: rgba(245, 158, 11, 0.08); 
+    }
 
-    ol, ul { margin-left: 1.3rem; color: #94a3b8; font-size: 0.95rem; margin-bottom: 0.75rem; }
-    li { margin-bottom: 0.45rem; padding-left: 0.25rem; }
-    a { color: #a5b4fc; text-decoration: none; font-weight: 500; }
-    a:hover { color: #ffffff; text-decoration: underline; }
+    .note-box.success { 
+      border-left-color: var(--emerald); 
+      background: rgba(16, 185, 129, 0.08); 
+    }
 
+    .note-box.info { 
+      border-left-color: var(--cyan); 
+      background: rgba(6, 182, 212, 0.08); 
+    }
+
+    ol, ul { 
+      margin-left: 1.4rem; 
+      color: #94a3b8; 
+      font-size: 0.95rem; 
+      margin-bottom: 0.85rem; 
+    }
+
+    li { 
+      margin-bottom: 0.5rem; 
+      padding-left: 0.25rem; 
+    }
+
+    a { 
+      color: #a5b4fc; 
+      text-decoration: none; 
+      font-weight: 500; 
+      transition: color 0.2s ease;
+    }
+
+    a:hover { 
+      color: #ffffff; 
+      text-decoration: underline; 
+    }
+
+    /* Grid for Features and Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .mini-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-md);
+      padding: 1.35rem;
+      transition: all 0.25s ease;
+    }
+
+    .mini-card:hover {
+      background: rgba(255, 255, 255, 0.045);
+      border-color: rgba(99, 102, 241, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .mini-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Tabs Component */
+    .tabs-nav {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-code);
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.65rem 1.15rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+
+    .tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      color: #ffffff;
+      background: rgba(99, 102, 241, 0.18);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+    }
+
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Commands Table / Cheat sheet */
+    .cmd-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-code);
+      border-radius: var(--radius-md);
+      margin: 1.25rem 0;
+    }
+
+    .cmd-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+
+    .cmd-table th {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.85rem 1rem;
+      color: #cbd5e1;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border-code);
+    }
+
+    .cmd-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+    }
+
+    .cmd-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .cmd-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* GitHub Section */
+    .github-box {
+      background: linear-gradient(135deg, rgba(24, 32, 54, 0.8) 0%, rgba(15, 20, 35, 0.9) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      margin-top: 3.5rem;
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .gh-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.75rem;
+    }
+
+    .gh-card {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+    }
+
+    .gh-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(99, 102, 241, 0.5);
+      transform: translateY(-3px);
+    }
+
+    .gh-btn-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--accent-gradient);
+      color: white;
+      padding: 0.65rem 1.2rem;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+    }
+
+    .gh-btn-cta:hover {
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    .gh-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      padding: 0.65rem 1.2rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.88rem;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: all 0.25s ease;
+    }
+
+    .gh-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      text-decoration: none;
+    }
+
+    /* Accordion / Troubleshooting */
+    .faq-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-md);
+      margin-bottom: 0.85rem;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .faq-item:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      padding: 1.15rem 1.25rem;
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-family: inherit;
+    }
+
+    .faq-chevron {
+      transition: transform 0.3s ease;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-chevron {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0, 1, 0, 1);
+      padding: 0 1.25rem;
+      color: var(--text-muted);
+      font-size: 0.94rem;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 1000px;
+      padding-bottom: 1.25rem;
+      transition: max-height 0.5s ease-in-out;
+    }
+
+    /* Footer */
     footer {
       text-align: center;
-      margin-top: 4rem;
-      padding-top: 2rem;
+      margin-top: 5rem;
+      padding-top: 2.5rem;
+      padding-bottom: 2rem;
       border-top: 1px solid rgba(255, 255, 255, 0.06);
       color: #64748b;
+      font-size: 0.88rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
       font-size: 0.85rem;
+    }
+
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: var(--accent);
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 99;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      background: var(--accent-hover);
+      transform: translateY(-3px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      body { padding: 0; }
+      .wrapper { padding: 2rem 1.15rem 4rem 1.15rem; }
+      .step-card { padding: 1.5rem; }
+      .github-box { padding: 1.6rem; }
+      h1 { font-size: 2.1rem; }
     }
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <header>
-      <div class="badge-pill">
-        <span class="badge-dot"></span>
-        Guia de Configuração • Windows
-      </div>
-      <h1>OpenClaude & OpenRouter</h1>
-      <p class="subtitle">Instalação descomplicada, atualização de ambiente com Node 22+ e conexão direta com modelos gratuitos.</p>
-    </header>
 
-    <div class="step-card">
-      <div class="card-top">
-        <div class="step-icon">01</div>
-        <h2 class="card-title">Verificar e Atualizar o Node.js</h2>
-      </div>
-      <p>O OpenClaude requer <strong>Node.js 22 LTS ou superior</strong>. Abra o PowerShell e consulte o seu ambiente:</p>
-      <div class="code-container">
-        <div class="code-header">
-          <span>PowerShell</span>
-          <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+  <!-- Top Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-brand" id="nav-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
         </div>
-        <pre>node -v
-npm -v</pre>
-      </div>
-      <p>Caso o comando não seja reconhecido ou seja inferior à versão <code>v22.x</code>, instale pelo winget:</p>
-      <div class="code-container">
-        <div class="code-header">
-          <span>PowerShell</span>
-          <button class="copy-button" onclick="copyCode(this)">Copiar</button>
-        </div>
-        <pre>winget install OpenJS.NodeJS.LTS</pre>
-      </div>
-      <div class="note-box warning">
-        <strong>Importante:</strong> Após a conclusão pelo winget, feche o PowerShell e abra uma nova janela para recarregar o sistema.
+        <span>OpenClaude Guia</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#pre-requisitos">Pré-requisitos</a></li>
+        <li><a href="#instalacao">Instalação</a></li>
+        <li><a href="#provedores">Provedores</a></li>
+        <li><a href="#persistencia">Persistência</a></li>
+        <li><a href="#comandos">Comandos</a></li>
+        <li><a href="#troubleshooting">Solução de Erros</a></li>
+        <li><a href="#github">GitHub</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="https://github.com/Gitlawb/openclaude" target="_blank" rel="noopener noreferrer" class="btn-github" id="btn-gh-core" title="Repositório Oficial do OpenClaude">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path></svg>
+          <span>OpenClaude</span>
+        </a>
+        <a href="https://github.com/rcminitor/openclaude-guia" target="_blank" rel="noopener noreferrer" class="btn-github" id="btn-gh-guia" title="Repositório deste Guia">
+          ⭐ <span>Guia</span>
+        </a>
       </div>
     </div>
+  </nav>
 
-    <div class="step-card">
-      <div class="card-top">
-        <div class="step-icon">02</div>
-        <h2 class="card-title">Instalar o OpenClaude CLI</h2>
+  <div class="wrapper">
+
+    <!-- Hero Section -->
+    <header class="hero">
+      <div class="badge-pill">
+        <span class="badge-dot"></span>
+        Guia Definitivo • Windows & PowerShell
       </div>
-      <p>Com o Node 22+ ativo, instale globalmente o binário:</p>
-      <div class="code-container">
-        <div class="code-header">
-          <span>PowerShell</span>
-          <button class="copy-button" onclick="copyCode(this)">Copiar</button>
-        </div>
-        <pre>npm install -g @gitlawb/openclaude@latest</pre>
+      <h1>OpenClaude & <span class="hero-gradient-text">Modelos de IA</span></h1>
+      <p class="subtitle">
+        Tudo o que você precisa para instalar, configurar variáveis, utilizar com modelos gratuitos (OpenRouter, Ollama local, DeepSeek) e dominar o agente de código no seu terminal.
+      </p>
+
+      <div class="hero-features-bar">
+        <span class="feat-tag">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Node.js 22 LTS Requerido
+        </span>
+        <span class="feat-tag">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          OpenRouter, DeepSeek & Ollama
+        </span>
+        <span class="feat-tag">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          100% Terminal-First
+        </span>
+        <span class="feat-tag">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Suporte a Servidores MCP
+        </span>
       </div>
-      <p>Se o comando <code>openclaude</code> não for reconhecido, execute para corrigir o PATH:</p>
-      <div class="code-container">
-        <div class="code-header">
-          <span>PowerShell</span>
-          <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+    </header>
+
+    <!-- Floating Navigation Bar -->
+    <div class="quick-nav" id="quick-nav">
+      <a href="#sobre">O que é?</a>
+      <a href="#pre-requisitos">Pré-requisitos</a>
+      <a href="#instalacao">Instalação</a>
+      <a href="#provedores">Provedores (Tabs)</a>
+      <a href="#persistencia">Persistência Windows</a>
+      <a href="#comandos">Comandos de Barra</a>
+      <a href="#troubleshooting">Solução de Erros</a>
+      <a href="#github">GitHub & Comunidade</a>
+    </div>
+
+    <!-- Seção: O que é o OpenClaude -->
+    <section id="sobre">
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">💡</div>
+          <h2 class="card-title">O que é o OpenClaude?</h2>
         </div>
-        <pre>$npmPrefix = npm config get prefix
+        <p>
+          O <strong>OpenClaude</strong> (mantido pela organização <strong>Gitlawb</strong>) é um fork de código aberto do <em>Claude Code</em> que liberta você do ecossistema fechado de uma única provedora. Ele transforma seu terminal em uma central de desenvolvimento autônomo com agentes inteligentes.
+        </p>
+        <div class="card-grid">
+          <div class="mini-card">
+            <div class="mini-card-title">🌐 Independência de Provedor</div>
+            <p>Conecte-se a mais de 200 modelos via <strong>OpenRouter</strong>, use <strong>Ollama</strong> local 100% offline e grátis, <strong>DeepSeek</strong>, <strong>Groq</strong> ou <strong>Gemini</strong>.</p>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-title">⚡ Agente Autônomo Completo</div>
+            <p>Ele não apenas responde perguntas: ele cria arquivos, edita código cirurgicamente, roda testes, executa comandos bash/PowerShell e faz buscas com ripgrep.</p>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-title">🔌 Protocolo MCP</div>
+            <p>Integração nativa com <strong>Model Context Protocol</strong>, permitindo que a IA consulte bancos de dados, APIs do GitHub, documentações externas e ferramentas personalizadas.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 1: Pré-requisitos -->
+    <section id="pre-requisitos">
+      <div class="section-title-wrap">
+        <div class="section-tag">Passo 01</div>
+        <h2 class="section-title">Pré-requisitos no Windows</h2>
+        <p class="section-desc">Certifique-se de ter as ferramentas de sistema recomendadas instaladas antes de iniciar o OpenClaude.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">01</div>
+          <h3 class="card-title">Verificar e Atualizar o Node.js</h3>
+        </div>
+        <p>O OpenClaude requer <strong>Node.js 22 LTS ou superior</strong> para funcionar com total suporte às APIs mais recentes. Abra o PowerShell e consulte o seu ambiente:</p>
+        
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre>node -v
+npm -v</pre>
+        </div>
+
+        <p>Caso o comando não seja reconhecido ou a versão seja inferior à <code>v22.x</code>, instale diretamente pelo winget oficial da Microsoft:</p>
+        
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre>winget install OpenJS.NodeJS.LTS</pre>
+        </div>
+
+        <div class="note-box warning">
+          <strong>Atenção:</strong> Após a conclusão pelo winget, feche o terminal do PowerShell e abra uma nova janela para que o Windows recarregue as variáveis de ambiente do Node.
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">02</div>
+          <h3 class="card-title">Instalar Git e Ripgrep (Recomendado)</h3>
+        </div>
+        <p>O OpenClaude utiliza o <strong>Git</strong> para rastrear alterações e gerar commits, e o <strong>Ripgrep (rg)</strong> para localizar trechos de código em milissegundos dentro do seu projeto:</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell (Instalação via Winget)</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre><span class="comment"># Instalação do Git for Windows</span>
+winget install Git.Git
+
+<span class="comment"># Instalação do Ripgrep para buscas rápidas</span>
+winget install BurntSushi.ripgrep.MSVC</pre>
+        </div>
+
+        <p>Também certifique-se de que a política de execução de scripts do PowerShell permita carregar binários locais:</p>
+        
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell (Executar como Usuário)</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 2: Instalação do OpenClaude -->
+    <section id="instalacao">
+      <div class="section-title-wrap">
+        <div class="section-tag">Passo 02</div>
+        <h2 class="section-title">Instalação Global do OpenClaude CLI</h2>
+        <p class="section-desc">Instale o pacote oficial via npm para torná-lo acessível em qualquer pasta do seu computador.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">03</div>
+          <h3 class="card-title">Instalar o Pacote npm</h3>
+        </div>
+        <p>Com o Node 22+ ativo, execute a instalação global:</p>
+        
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre>npm install -g @gitlawb/openclaude@latest</pre>
+        </div>
+
+        <p>Para confirmar que a instalação ocorreu com êxito, consulte a versão:</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre>openclaude --version</pre>
+        </div>
+
+        <div class="note-box info">
+          <strong>O comando não foi reconhecido?</strong> No Windows, o npm às vezes não inclui a pasta global de binários no PATH do usuário. Caso receba o erro <em>"o termo 'openclaude' não é reconhecido"</em>, execute o bloco corretor abaixo:
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell (Correção Automática de PATH)</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre>$npmPrefix = npm config get prefix
 $currentUserPath = [Environment]::GetEnvironmentVariable("Path", "User")
 if (($currentUserPath -split ';') -notcontains $npmPrefix) {
     [Environment]::SetEnvironmentVariable("Path", "$currentUserPath;$npmPrefix", "User")
+    Write-Host "PATH atualizado com sucesso! Feche e reabra o PowerShell." -ForegroundColor Green
+} else {
+    Write-Host "O prefixo do npm já está no seu PATH!" -ForegroundColor Cyan
 }</pre>
-      </div>
-    </div>
-
-    <div class="step-card">
-      <div class="card-top">
-        <div class="step-icon">03</div>
-        <h2 class="card-title">Obter Chave e Modelo no OpenRouter</h2>
-      </div>
-      <ol>
-        <li>Acesse o portal oficial em <a href="https://openrouter.ai/" target="_blank" rel="noopener">openrouter.ai</a> e conecte sua conta.</li>
-        <li>No menu <strong>Keys</strong>, gere uma chave com <strong>Create Key</strong> e copie o token gerado (<code>sk-or-v1-...</code>).</li>
-        <li>No catálogo de <strong>Models</strong>, utilize o roteador genérico gratuito <code>openrouter/free</code> ou modelos com a etiqueta <code>:free</code>.</li>
-      </ol>
-    </div>
-
-    <div class="step-card">
-      <div class="card-top">
-        <div class="step-icon">04</div>
-        <h2 class="card-title">Executar com o Modelo Gratuito</h2>
-      </div>
-      <p>Cole no PowerShell substituindo pela sua chave para iniciar imediatamente sem custos:</p>
-      <div class="code-container">
-        <div class="code-header">
-          <span>PowerShell</span>
-          <button class="copy-button" onclick="copyCode(this)">Copiar</button>
         </div>
-        <pre>$env:CLAUDE_CODE_USE_OPENAI="1"
+      </div>
+    </section>
+
+    <!-- Seção 3: Provedores (Tabs Interativas) -->
+    <section id="provedores">
+      <div class="section-title-wrap">
+        <div class="section-tag">Passo 03</div>
+        <h2 class="section-title">Configurar Provedores de IA</h2>
+        <p class="section-desc">Escolha como prefere rodar o OpenClaude: com modelos gratuitos na nuvem, offline na sua máquina ou com os melhores modelos do mundo.</p>
+      </div>
+
+      <div class="step-card">
+        <!-- Tabs Navigation -->
+        <div class="tabs-nav" id="provider-tabs">
+          <button class="tab-btn active" onclick="switchTab('tab-openrouter')">🌐 OpenRouter (Grátis & Nuvem)</button>
+          <button class="tab-btn" onclick="switchTab('tab-ollama')">🖥️ Ollama (Local & 100% Grátis)</button>
+          <button class="tab-btn" onclick="switchTab('tab-deepseek')">⚡ DeepSeek Oficial</button>
+          <button class="tab-btn" onclick="switchTab('tab-groq')">🚀 Groq (Ultra Rápido)</button>
+          <button class="tab-btn" onclick="switchTab('tab-wizard')">🪄 Assistente /provider</button>
+        </div>
+
+        <!-- Tab 1: OpenRouter -->
+        <div id="tab-openrouter" class="tab-pane active">
+          <h3 class="card-title" style="margin-bottom: 0.75rem;">1. Usando com OpenRouter (Gratuito ou Pago)</h3>
+          <p>O OpenRouter é a opção mais flexível, pois dá acesso a centenas de modelos através de uma única API, incluindo modelos com etiqueta <code>:free</code>.</p>
+          
+          <ol>
+            <li>Acesse <a href="https://openrouter.ai/" target="_blank" rel="noopener">openrouter.ai</a> e crie ou faça login na sua conta.</li>
+            <li>No menu lateral <strong>Keys</strong>, clique em <strong>Create Key</strong> e copie o token gerado (começa com <code>sk-or-v1-...</code>).</li>
+            <li>Defina as variáveis no PowerShell e inicie o agente:</li>
+          </ol>
+
+          <div class="code-container">
+            <div class="code-header">
+              <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <span>PowerShell (OpenRouter Gratuito)</span>
+              <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+            </div>
+            <pre><span class="comment"># Ativar o backend OpenAI compatível</span>
+$env:CLAUDE_CODE_USE_OPENAI="1"
 $env:OPENAI_BASE_URL="https://openrouter.ai/api/v1"
-$env:OPENAI_API_KEY="sk-or-sua-chave-aqui"
+$env:OPENAI_API_KEY="sk-or-v1-coloque-sua-chave-aqui"
+
+<span class="comment"># Para usar o roteador gratuito do OpenRouter:</span>
 $env:OPENAI_MODEL="openrouter/free"
 
+<span class="comment"># Iniciar o OpenClaude</span>
 openclaude</pre>
-      </div>
-    </div>
+          </div>
 
+          <div class="note-box success">
+            <strong>Dica de Modelos Gratuitos:</strong> Além de <code>openrouter/free</code>, você pode definir modelos específicos como <code>deepseek/deepseek-r1:free</code> ou <code>meta-llama/llama-3.3-70b-instruct:free</code>. Para modelos pagos de ponta, utilize <code>anthropic/claude-3.5-sonnet</code> ou <code>openai/gpt-4o</code>.
+          </div>
+        </div>
+
+        <!-- Tab 2: Ollama Local -->
+        <div id="tab-ollama" class="tab-pane">
+          <h3 class="card-title" style="margin-bottom: 0.75rem;">2. Usando com Ollama (100% Local & Privado)</h3>
+          <p>Você pode rodar o OpenClaude totalmente sem internet, usando modelos rodando na sua própria placa de vídeo ou processador com o Ollama.</p>
+
+          <ol>
+            <li>Instale o Ollama no Windows executando <code>winget install Ollama.Ollama</code> ou baixe em <a href="https://ollama.com/" target="_blank" rel="noopener">ollama.com</a>.</li>
+            <li>Abra o terminal e baixe um modelo ideal para programação (como o Qwen 2.5 Coder):</li>
+          </ol>
+
+          <div class="code-container">
+            <div class="code-header">
+              <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <span>PowerShell (Baixar Modelo Ollama)</span>
+              <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+            </div>
+            <pre>ollama run qwen2.5-coder:14b</pre>
+          </div>
+
+          <p>Depois, configure o OpenClaude para apontar para o servidor local do Ollama:</p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <span>PowerShell (Ollama Local)</span>
+              <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+            </div>
+            <pre>$env:CLAUDE_CODE_USE_OPENAI="1"
+$env:OPENAI_BASE_URL="http://localhost:11434/v1"
+$env:OPENAI_API_KEY="ollama"
+$env:OPENAI_MODEL="qwen2.5-coder:14b"
+
+openclaude</pre>
+          </div>
+        </div>
+
+        <!-- Tab 3: DeepSeek Oficial -->
+        <div id="tab-deepseek" class="tab-pane">
+          <h3 class="card-title" style="margin-bottom: 0.75rem;">3. Usando com DeepSeek Oficial</h3>
+          <p>O DeepSeek oferece um dos melhores raciocínios para código com o custo por token mais baixo do mercado.</p>
+
+          <ol>
+            <li>Obtenha sua chave em <a href="https://platform.deepseek.com/" target="_blank" rel="noopener">platform.deepseek.com</a>.</li>
+            <li>Execute os comandos no PowerShell:</li>
+          </ol>
+
+          <div class="code-container">
+            <div class="code-header">
+              <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <span>PowerShell (DeepSeek)</span>
+              <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+            </div>
+            <pre>$env:CLAUDE_CODE_USE_OPENAI="1"
+$env:OPENAI_BASE_URL="https://api.deepseek.com/v1"
+$env:OPENAI_API_KEY="sk-sua-chave-deepseek-aqui"
+$env:OPENAI_MODEL="deepseek-chat"
+
+openclaude</pre>
+          </div>
+          <div class="note-box info">
+            <strong>DeepSeek R1:</strong> Se preferir raciocínio profundo passo-a-passo, altere o modelo para <code>$env:OPENAI_MODEL="deepseek-reasoner"</code>.
+          </div>
+        </div>
+
+        <!-- Tab 4: Groq -->
+        <div id="tab-groq" class="tab-pane">
+          <h3 class="card-title" style="margin-bottom: 0.75rem;">4. Usando com Groq Cloud (Velocidade Extrema)</h3>
+          <p>O Groq é famoso pela latência ultrabaixa e geração de centenas de tokens por segundo em hardware LPU dedicado.</p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <span>PowerShell (Groq)</span>
+              <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+            </div>
+            <pre>$env:CLAUDE_CODE_USE_OPENAI="1"
+$env:OPENAI_BASE_URL="https://api.groq.com/openai/v1"
+$env:OPENAI_API_KEY="gsk_sua-chave-groq-aqui"
+$env:OPENAI_MODEL="llama-3.3-70b-versatile"
+
+openclaude</pre>
+          </div>
+        </div>
+
+        <!-- Tab 5: Assistente /provider -->
+        <div id="tab-wizard" class="tab-pane">
+          <h3 class="card-title" style="margin-bottom: 0.75rem;">5. Assistente Interativo do OpenClaude</h3>
+          <p>Você sabia que não precisa configurar variáveis de ambiente manualmente? O OpenClaude possui um assistente interativo embutido!</p>
+
+          <ol>
+            <li>Basta abrir o OpenClaude executando: <code>openclaude</code></li>
+            <li>Dentro da sessão interativa, digite: <code>/provider</code></li>
+            <li>Um menu com opções (OpenRouter, Ollama, OpenAI, Anthropic, Custom) surgirá na sua tela, permitindo salvar perfis permanentes em <code>~/.openclaude/</code>.</li>
+          </ol>
+
+          <div class="code-container">
+            <div class="code-header">
+              <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <span>Terminal Interativo OpenClaude</span>
+              <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+            </div>
+            <pre>> /provider
+<span class="comment"># Siga o menu interativo com as setas do teclado para configurar e trocar de perfil!</span></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 4: Persistência no Windows -->
+    <section id="persistencia">
+      <div class="section-title-wrap">
+        <div class="section-tag">Passo 04</div>
+        <h2 class="section-title">Como Deixar as Configurações Permanentes</h2>
+        <p class="section-desc">Evite ter que digitar as chaves e URLs toda vez que fechar e abrir o PowerShell.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">📌</div>
+          <h3 class="card-title">Opção A: Salvar no Perfil do PowerShell ($PROFILE)</h3>
+        </div>
+        <p>O arquivo de perfil do PowerShell é carregado automaticamente sempre que uma nova aba ou janela é aberta. Vamos editá-lo:</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>PowerShell</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre><span class="comment"># Criar o arquivo de perfil caso ainda não exista</span>
+if (!(Test-Path $PROFILE)) { New-Item -Type File -Path $PROFILE -Force }
+
+<span class="comment"># Abrir no Bloco de Notas para edição</span>
+notepad $PROFILE</pre>
+        </div>
+
+        <p>Cole as seguintes linhas no final do arquivo que abrir no Bloco de Notas e salve (<kbd>Ctrl + S</kbd>):</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>Conteúdo para o $PROFILE</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre><span class="comment"># Configuração Padrão do OpenClaude</span>
+$env:CLAUDE_CODE_USE_OPENAI = "1"
+$env:OPENAI_BASE_URL = "https://openrouter.ai/api/v1"
+$env:OPENAI_API_KEY = "sk-or-v1-sua-chave-aqui"
+$env:OPENAI_MODEL = "openrouter/free"
+
+<span class="comment"># Atalho opcional: basta digitar 'oc' para abrir o openclaude</span>
+function oc { openclaude $args }</pre>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">⚡</div>
+          <h3 class="card-title">Opção B: Criar um Script de Inicialização Rápida (.ps1)</h3>
+        </div>
+        <p>Se você alterna frequentemente entre Ollama, DeepSeek e OpenRouter, crie um script <code>iniciar-openclaude.ps1</code> na sua pasta de projetos:</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+            <span>iniciar-openclaude.ps1</span>
+            <button class="copy-button" onclick="copyCode(this)">Copiar</button>
+          </div>
+          <pre>$env:CLAUDE_CODE_USE_OPENAI="1"
+$env:OPENAI_BASE_URL="https://openrouter.ai/api/v1"
+$env:OPENAI_API_KEY="sk-or-v1-sua-chave-aqui"
+$env:OPENAI_MODEL="openrouter/free"
+
+Write-Host "Iniciando OpenClaude com OpenRouter..." -ForegroundColor Green
+openclaude</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 5: Comandos de Barra & Modo Agente -->
+    <section id="comandos">
+      <div class="section-title-wrap">
+        <div class="section-tag">Passo 05</div>
+        <h2 class="section-title">Comandos Essenciais do OpenClaude (Slash Commands)</h2>
+        <p class="section-desc">Utilize os comandos internos para controlar sessões, economizar tokens e gerenciar recursos.</p>
+      </div>
+
+      <div class="step-card">
+        <p>Quando o OpenClaude estiver ativo no seu terminal, você pode digitar comandos iniciados por barra (<code>/</code>) para executar ações imediatas:</p>
+
+        <div class="cmd-table-wrap">
+          <table class="cmd-table">
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Finalidade</th>
+                <th>Exemplo de Uso</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>/provider</code></td>
+                <td>Abre o assistente gráfico para alternar provedores e salvar perfis.</td>
+                <td><code>/provider</code></td>
+              </tr>
+              <tr>
+                <td><code>/model</code></td>
+                <td>Altera o modelo de LLM ativo sem sair da sessão.</td>
+                <td><code>/model deepseek-chat</code></td>
+              </tr>
+              <tr>
+                <td><code>/init</code></td>
+                <td>Analisa o projeto atual e cria diretrizes e regras no arquivo <code>CLAUDE.md</code>.</td>
+                <td><code>/init</code></td>
+              </tr>
+              <tr>
+                <td><code>/compact</code></td>
+                <td>Comprime o histórico da conversa para liberar a janela de contexto e poupar tokens.</td>
+                <td><code>/compact</code></td>
+              </tr>
+              <tr>
+                <td><code>/cost</code></td>
+                <td>Exibe a quantidade de tokens consumidos e o custo estimado da sessão atual.</td>
+                <td><code>/cost</code></td>
+              </tr>
+              <tr>
+                <td><code>/doctor</code></td>
+                <td>Faz um diagnóstico completo das ferramentas de sistema (Node, Git, Ripgrep, etc).</td>
+                <td><code>/doctor</code></td>
+              </tr>
+              <tr>
+                <td><code>/clear</code></td>
+                <td>Limpa o histórico de memória e inicia uma conversa do zero.</td>
+                <td><code>/clear</code></td>
+              </tr>
+              <tr>
+                <td><code>/mcp</code></td>
+                <td>Gerencia servidores MCP (Model Context Protocol) conectados ao agente.</td>
+                <td><code>/mcp</code></td>
+              </tr>
+              <tr>
+                <td><code>/review</code></td>
+                <td>Apresenta um diff detalhado de todas as alterações feitas no código antes de commitar.</td>
+                <td><code>/review</code></td>
+              </tr>
+              <tr>
+                <td><code>/help</code></td>
+                <td>Mostra a lista completa de comandos, atalhos de teclado e parâmetros.</td>
+                <td><code>/help</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note-box info">
+          <strong>Modo Não-Interativo (Prompt Direto):</strong> Você também pode rodar comandos diretamente do terminal sem entrar no chat com o parâmetro <code>-p</code>:
+          <br>
+          <code>openclaude -p "Crie um endpoint Express em server.js com rota /health e teste"</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 6: Troubleshooting / Solução de Problemas -->
+    <section id="troubleshooting">
+      <div class="section-title-wrap">
+        <div class="section-tag">Passo 06</div>
+        <h2 class="section-title">Solução de Problemas no Windows</h2>
+        <p class="section-desc">Respostas rápidas para os erros mais comuns enfrentados durante a instalação e execução.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>1. Erro: "o termo 'openclaude' não é reconhecido como nome de cmdlet"</span>
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p><strong>Causa:</strong> A pasta global do npm não está registrada na variável de ambiente PATH do Windows.</p>
+            <p><strong>Solução:</strong> Execute no PowerShell:</p>
+            <code>$npm = npm config get prefix; [Environment]::SetEnvironmentVariable("Path", "$([Environment]::GetEnvironmentVariable('Path','User'));$npm", "User")</code>
+            <p style="margin-top: 0.5rem;">Depois feche todas as janelas do terminal e abra novamente.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>2. Erro: "A execução de scripts foi desabilitada neste sistema"</span>
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p><strong>Causa:</strong> Política de segurança padrão do PowerShell bloqueando a execução de scripts .ps1.</p>
+            <p><strong>Solução:</strong> Execute o comando para liberar scripts locais assinados para o seu usuário:</p>
+            <code>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force</code>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>3. Erro 401 Unauthorized ou "Invalid API Key" no OpenRouter</span>
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p><strong>Causa:</strong> Chave de API expirada, com espaço extra ou digitada incorretamente.</p>
+            <p><strong>Solução:</strong> Verifique se a variável está com o valor correto digitando <code>$env:OPENAI_API_KEY</code> no PowerShell. Certifique-se de que a chave começa com <code>sk-or-v1-</code>.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>4. Erro: "Node.js version is below 22.0.0"</span>
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p><strong>Causa:</strong> O OpenClaude requer Node v22+ devido ao uso de APIs nativas recentes.</p>
+            <p><strong>Solução:</strong> Atualize imediatamente usando o winget:</p>
+            <code>winget install OpenJS.NodeJS.LTS</code>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>5. Falha ao encontrar arquivos / Ripgrep ausente</span>
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p><strong>Causa:</strong> O OpenClaude necessita do executável <code>rg</code> no PATH para varredura de código.</p>
+            <p><strong>Solução:</strong> Instale o Ripgrep pelo winget:</p>
+            <code>winget install BurntSushi.ripgrep.MSVC</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 7: Ecossistema GitHub & Comunidade -->
+    <section id="github">
+      <div class="github-box">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+          <svg style="width: 28px; height: 28px; fill: #818cf8;" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path></svg>
+          <h2 style="font-size: 1.7rem; color: #ffffff; font-weight: 800; letter-spacing: -0.02em;">Repositórios & Comunidade GitHub</h2>
+        </div>
+        <p style="color: #cbd5e1; max-width: 650px;">
+          Tanto o projeto OpenClaude quanto este guia são iniciativas <strong>100% de código aberto</strong>. Participe, deixe sua estrela e envie sugestões de melhorias!
+        </p>
+
+        <div class="gh-actions-grid">
+          <!-- Card Repositório Oficial -->
+          <div class="gh-card">
+            <div>
+              <div style="font-size: 0.8rem; font-weight: 700; color: #818cf8; text-transform: uppercase;">Projeto Oficial</div>
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-top: 0.3rem;">Gitlawb/openclaude</h3>
+              <p style="font-size: 0.88rem; color: #94a3b8; margin-top: 0.5rem;">
+                Código-fonte do binário OpenClaude CLI, extensões para VS Code, relatórios de bugs e roadmap de desenvolvimento.
+              </p>
+            </div>
+            <div>
+              <a href="https://github.com/Gitlawb/openclaude" target="_blank" rel="noopener noreferrer" class="gh-btn-cta">
+                <svg style="width: 16px; height: 16px; fill: white;" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"></path></svg>
+                <span>Visitar OpenClaude Oficial</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Card Repositório do Guia -->
+          <div class="gh-card">
+            <div>
+              <div style="font-size: 0.8rem; font-weight: 700; color: #34d399; text-transform: uppercase;">Repositório deste Guia</div>
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-top: 0.3rem;">rcminitor/openclaude-guia</h3>
+              <p style="font-size: 0.88rem; color: #94a3b8; margin-top: 0.5rem;">
+                Repositório oficial deste site guia interativo. Sinta-se livre para abrir issues com dicas de novos modelos ou enviar Pull Requests.
+              </p>
+            </div>
+            <div>
+              <a href="https://github.com/rcminitor/openclaude-guia" target="_blank" rel="noopener noreferrer" class="gh-btn-secondary">
+                ⭐ <span>Dar Star & Contribuir no Guia</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Card Pacote NPM -->
+          <div class="gh-card">
+            <div>
+              <div style="font-size: 0.8rem; font-weight: 700; color: #f43f5e; text-transform: uppercase;">Distribuição NPM</div>
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-top: 0.3rem;">@gitlawb/openclaude</h3>
+              <p style="font-size: 0.88rem; color: #94a3b8; margin-top: 0.5rem;">
+                Consulte as notas de versão oficiais, histórico de atualizações e métricas de download no registro público do npm.
+              </p>
+            </div>
+            <div>
+              <a href="https://www.npmjs.com/package/@gitlawb/openclaude" target="_blank" rel="noopener noreferrer" class="gh-btn-secondary">
+                📦 <span>Ver Pacote no NPM</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
-      Guia gerado para ambiente Windows PowerShell • OpenClaude Coding Agent
+      <div class="footer-links">
+        <a href="#pre-requisitos">Pré-requisitos</a>
+        <a href="#instalacao">Instalação</a>
+        <a href="#provedores">Provedores</a>
+        <a href="#comandos">Comandos</a>
+        <a href="#troubleshooting">Solução de Problemas</a>
+        <a href="https://github.com/Gitlawb/openclaude" target="_blank" rel="noopener">GitHub OpenClaude</a>
+        <a href="https://github.com/rcminitor/openclaude-guia" target="_blank" rel="noopener">GitHub do Guia</a>
+      </div>
+      <p>
+        Guia para ambiente Windows PowerShell • Desenvolvido para a comunidade de código aberto.
+      </p>
     </footer>
+
   </div>
 
+  <!-- Botão Flutuante Voltar ao Topo -->
+  <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Voltar ao Topo">
+    ↑
+  </button>
+
   <script>
+    // Função de Cópia de Código com Feedback
     function copyCode(btn) {
       const codeBlock = btn.closest('.code-container').querySelector('pre');
       navigator.clipboard.writeText(codeBlock.innerText).then(() => {
@@ -333,6 +1565,43 @@ openclaude</pre>
         }, 2200);
       });
     }
+
+    // Alternador de Tabs para Provedores
+    function switchTab(tabId) {
+      // Desativa todas as tabs e botões
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+      // Ativa a tab selecionada
+      const targetPane = document.getElementById(tabId);
+      if (targetPane) {
+        targetPane.classList.add('active');
+      }
+
+      // Adiciona classe ativa ao botão clicado
+      const clickedBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => 
+        btn.getAttribute('onclick').includes(tabId)
+      );
+      if (clickedBtn) {
+        clickedBtn.classList.add('active');
+      }
+    }
+
+    // Alternador de FAQ (Accordion)
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      item.classList.toggle('open');
+    }
+
+    // Controle do Botão Voltar ao Topo
+    const backToTopBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    });
   </script>
 </body>
 </html>
