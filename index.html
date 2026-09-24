@@ -831,6 +831,25 @@
       transform: translateY(-3px);
     }
 
+    /* Vídeo incorporado */
+    .video-embed {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      margin: 1.25rem 0;
+      border: 1px solid var(--border-code);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--code-bg);
+    }
+
+    .video-embed iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
     /* Screenshots do tutorial */
     .shot {
       margin: 1.5rem 0;
@@ -978,6 +997,18 @@
         <div class="section-tag">Tutorial com prints</div>
         <h2 class="section-title">Do zero ao primeiro prompt, tela por tela</h2>
         <p class="section-desc">Roteiro real de uma instalação no Windows: reinstalar o OpenClaude, conferir o ambiente e passar pelo assistente de configuração usando o OpenRouter com modelos gratuitos.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="card-top">
+          <div class="step-icon">▶</div>
+          <h3 class="card-title">Vídeo de referência</h3>
+        </div>
+        <p>Este tutorial segue o vídeo <strong>"Claude Code GRÁTIS?? Como Instalar o OpenClaude no Windows + VSCode!"</strong>, do canal <strong>GXDEV</strong>. O vídeo começa no trecho da instalação (2:59).</p>
+        <div class="video-embed">
+          <iframe src="https://www.youtube-nocookie.com/embed/7S7vqSudSx0?start=179" title="Claude Code GRÁTIS?? Como Instalar o OpenClaude no Windows + VSCode! (GXDEV)" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        <p>Não carregou? <a href="https://www.youtube.com/watch?v=7S7vqSudSx0&amp;t=179s" target="_blank" rel="noopener noreferrer">Assista direto no YouTube</a>.</p>
       </div>
 
       <div class="step-card">
